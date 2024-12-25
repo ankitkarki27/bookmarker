@@ -90,16 +90,14 @@ function BookmarkManager() {
       <div className="container mx-auto px-4 py-8 flex-1">
         <header className="flex flex-wrap justify-between items-center mb-10">
           <div className="mb-4 sm:mb-0">
-            {/* <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">BookmarkIT</h1> */}
             <img src="/assets/logo2.png" alt="logo" className="w-220 h-12" />
-           
-            {/* <p className="text-gray-800 text-sm">Easily save and organize your favorite websites</p> */}
-          </div>
+            </div>
           <button
             onClick={() => setModalOpen(true)}
-            className="bg-gray-800 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg shadow-md hover:bg-gray-900 transition flex items-center"
+            className="bg-gray-800 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg hover:bg-gray-900 transition flex items-center"
           >
-            <i className="feather-icon mr-2">+</i>Add Bookmark
+            
+            <i data-feather="plus-circle" className="text-gray-200"></i>Add Bookmark
           </button>
         </header>
 
@@ -129,7 +127,7 @@ function BookmarkManager() {
         {/* Alert Notification */}
         {alertVisible && (
           <div
-            className={`fixed bottom-8 right-4 py-2 px-4 rounded-lg shadow-lg transition-transform transform ${alertVisible ? "translate-x-0" : "translate-x-full"} 
+            className={`fixed bottom-16 right-4 py-2 px-4 rounded-lg shadow-lg transition-transform transform ${alertVisible ? "translate-x-0" : "translate-x-full"} 
             ${alertType === "success" ? "bg-green-500" : "bg-red-500"} text-white`}
           >
             {alertMessage}
@@ -203,7 +201,7 @@ function BookmarkManager() {
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Add New Bookmark</h3>
+            <h3 className="text-lg font-bold text-gray-800 mb-4">Bookmarker</h3>
             <form onSubmit={handleFormSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -253,8 +251,8 @@ function BookmarkManager() {
         </div>
       )}
 
-      <footer className="bg-gray-800 text-center text-gray-400 py-4">
-        &copy; 2024 Bookmark Manager. All rights reserved.
+      <footer className="bg-gray-800 text-center text-gray-200 py-4">
+        &copy; 2024 Bookmarker. All rights reserved.
       </footer>
     </div>
   );
