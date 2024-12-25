@@ -90,8 +90,10 @@ function BookmarkManager() {
       <div className="container mx-auto px-4 py-8 flex-1">
         <header className="flex flex-wrap justify-between items-center mb-10">
           <div className="mb-4 sm:mb-0">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">BookmarkIT</h1>
-            <p className="text-gray-800 text-sm">Easily save and organize your favorite websites</p>
+            {/* <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">BookmarkIT</h1> */}
+            <img src="/assets/logo2.png" alt="logo" className="w-220 h-12" />
+           
+            {/* <p className="text-gray-800 text-sm">Easily save and organize your favorite websites</p> */}
           </div>
           <button
             onClick={() => setModalOpen(true)}
