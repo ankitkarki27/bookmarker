@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
+import feather from 'feather-icons'; // Import Feather Icons
 
 function BookmarkManager() {
   const [bookmarks, setBookmarks] = useState(() => JSON.parse(localStorage.getItem('bookmarks')) || []);
@@ -9,6 +10,7 @@ function BookmarkManager() {
 
   useEffect(() => {
     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    feather.replace(); // Replace Feather icons after the bookmarks are updated
   }, [bookmarks]);
 
   const handleInputChange = (e) => {
@@ -70,7 +72,7 @@ function BookmarkManager() {
       <div className="container mx-auto px-4 py-8 flex-1">
         <header className="flex flex-wrap justify-between items-center mb-10">
           <div className="mb-4 sm:mb-0">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Bookmarker</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">BookmarkIT</h1>
             <p className="text-gray-800 text-sm">Easily save and organize your favorite websites</p>
           </div>
           <button
@@ -84,18 +86,19 @@ function BookmarkManager() {
         {/* Stats Section */}
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
           <div className="bg-white border rounded-lg p-4 shadow-sm flex items-center space-x-4">
-          <div class="p-2 bg-blue-100 rounded-full">
-                    <i data-feather="bookmark" class="w-5 h-5 text-blue-500"></i>
-                </div>
+            <div className="p-2 bg-blue-100 rounded-full">
+              <i data-feather="bookmark" className="text-blue-500"></i>
+            </div>
+
             <div>
               <p className="text-sm text-gray-600">Total Bookmarks</p>
               <p className="text-xl font-bold text-gray-800">{bookmarks.length}</p>
             </div>
           </div>
           <div className="bg-white border rounded-lg p-4 shadow-sm flex items-center space-x-4">
-          <div class="p-2 bg-green-100 rounded-full">
-                    <i data-feather="plus-circle" class="w-5 h-5 text-green-500"></i>
-                </div>
+            <div className="p-2 bg-green-100 rounded-full">
+              <i data-feather="plus" className="text-green-500"></i>
+            </div>
             <div>
               <p className="text-sm text-gray-600">Added Today</p>
               <p className="text-xl font-bold text-gray-800">{todayCount}</p>
@@ -112,48 +115,51 @@ function BookmarkManager() {
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {bookmarks.map((bookmark) => (
-                <div
-                  key={bookmark.id}
-                  className="bg-white rounded-lg p-4 shadow-md border flex items-start space-x-4"
-                >
-                  <img
-                    src={getFavicon(bookmark.url)}
-                    alt="Favicon"
-                    className="w-6 h-6"
-                  />
-                  <div className="flex-grow">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {bookmark.name}
-                    </h3>
-                    <a
-                      href={bookmark.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 text-sm break-all"
-                    >
-                      {bookmark.url}
-                    </a>
-                    <p className="text-gray-500 text-xs mt-1">
-                      Added on {new Date(bookmark.date).toLocaleDateString()}
-                    </p>
+              {/* Sorting bookmarks by date in descending order */}
+              {bookmarks
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map((bookmark) => (
+                  <div
+                    key={bookmark.id}
+                    className="bg-white rounded-lg p-4 shadow-md border flex items-start space-x-4"
+                  >
+                    <img
+                      src={getFavicon(bookmark.url)}
+                      alt="Favicon"
+                      className="w-6 h-6"
+                    />
+                    <div className="flex-grow">
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {bookmark.name}
+                      </h3>
+                      <a
+                        href={bookmark.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 text-sm break-all"
+                      >
+                        {bookmark.url}
+                      </a>
+                      <p className="text-gray-500 text-xs mt-1">
+                        Added on {new Date(bookmark.date).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleDeleteBookmark(bookmark.id)}
+                        className="text-red-500 hover:text-red-700 mt-2"
+                      >
+                        Delete
+                      </button>
+                      <button
+                        onClick={() => handleEditBookmark(bookmark.id)}
+                        className="text-green-500 hover:text-green-700 mt-2"
+                      >
+                        Edit
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleDeleteBookmark(bookmark.id)}
-                      className="text-red-500 hover:text-red-700 mt-2"
-                    >
-                      Delete
-                    </button>
-                    <button
-                      onClick={() => handleEditBookmark(bookmark.id)}
-                      className="text-green-500 hover:text-green-700 mt-2"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </section>
@@ -190,7 +196,7 @@ function BookmarkManager() {
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="https://goodle.com"
+                  placeholder="https://www.google.com"
                 />
               </div>
               <div className="flex justify-end space-x-4">
@@ -212,13 +218,11 @@ function BookmarkManager() {
           </div>
         </div>
       )}
+      <footer className="bg-gray-800 text-center text-gray-400 py-4">
+        &copy; 2024 Bookmark Manager. All rights reserved.
+      </footer>
     </div>
   );
-
-  <footer class="bg-gray-800 text-center text-gray-400 py-4">
-    &copy; 2024 Bookmark Manager. All rights reserved.
-</footer>
 }
-
 
 export default BookmarkManager;
