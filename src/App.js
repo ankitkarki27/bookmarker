@@ -1,4 +1,12 @@
-import Header from './components/Header';
-import Stats from './components/Stats';
-import BookmarksList from './components/BookmarksList';
-import BookmarkForm from './components/BookmarkForm';
+import React from 'react';
+import BookmarkManager from './components/BookmarkManager';
+
+function App() {
+  return (
+    <div className="App">
+      <BookmarkManager />
+    </div>
+  );
+}
+
+export default App;
