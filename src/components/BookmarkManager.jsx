@@ -7,6 +7,11 @@ function BookmarkManager() {
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', url: '' });
   const [editingBookmarkId, setEditingBookmarkId] = useState(null);
+  
+  // State for the alert message and type (success, error, etc.)
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState('success'); // 'success' or 'error'
 
   useEffect(() => {
     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
@@ -30,11 +35,13 @@ function BookmarkManager() {
         )
       );
       setEditingBookmarkId(null);
+      showAlert('Bookmark updated successfully!', 'success');
     } else {
       setBookmarks((prev) => [
         ...prev,
         { id: Date.now(), name, url, date: new Date().toISOString() },
       ]);
+      showAlert('Bookmark added successfully!', 'success');
     }
 
     setFormData({ name: '', url: '' });
@@ -43,6 +50,7 @@ function BookmarkManager() {
 
   const handleDeleteBookmark = (id) => {
     setBookmarks((prev) => prev.filter((bookmark) => bookmark.id !== id));
+    showAlert('Bookmark deleted successfully!', 'error');
   };
 
   const handleEditBookmark = (id) => {
@@ -61,6 +69,16 @@ function BookmarkManager() {
     } catch {
       return 'https://www.google.com/s2/favicons?domain=default';
     }
+  };
+
+  const showAlert = (message, type) => {
+    setAlertMessage(message);
+    setAlertType(type); // 'success' or 'error'
+    setAlertVisible(true);
+
+    setTimeout(() => {
+      setAlertVisible(false);  // Hide alert after 3 seconds
+    }, 3000);
   };
 
   const todayCount = bookmarks.filter(
@@ -84,7 +102,7 @@ function BookmarkManager() {
         </header>
 
         {/* Stats Section */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <div className="bg-white border rounded-lg p-4 shadow-sm flex items-center space-x-4">
             <div className="p-2 bg-blue-100 rounded-full">
               <i data-feather="bookmark" className="text-blue-500"></i>
@@ -105,6 +123,16 @@ function BookmarkManager() {
             </div>
           </div>
         </section>
+
+        {/* Alert Notification */}
+        {alertVisible && (
+          <div
+            className={`fixed bottom-8 right-4 py-2 px-4 rounded-lg shadow-lg transition-transform transform ${alertVisible ? "translate-x-0" : "translate-x-full"} 
+            ${alertType === "success" ? "bg-green-500" : "bg-red-500"} text-white`}
+          >
+            {alertMessage}
+          </div>
+        )}
 
         {/* Bookmarks Display Section */}
         <section>
@@ -144,18 +172,22 @@ function BookmarkManager() {
                         Added on {new Date(bookmark.date).toLocaleDateString()}
                       </p>
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-1 mt-4">
                       <button
                         onClick={() => handleDeleteBookmark(bookmark.id)}
                         className="text-red-500 hover:text-red-700 mt-2"
                       >
-                        Delete
+                        <div className="p-2">
+                          <i data-feather="trash-2" className="text-red-500 w-4 h-4"></i>
+                        </div>
                       </button>
                       <button
                         onClick={() => handleEditBookmark(bookmark.id)}
                         className="text-green-500 hover:text-green-700 mt-2"
                       >
-                        Edit
+                        <div className="p-2">
+                          <i data-feather="edit" className="text-green-500 w-4 h-4"></i>
+                        </div>
                       </button>
                     </div>
                   </div>
@@ -218,6 +250,7 @@ function BookmarkManager() {
           </div>
         </div>
       )}
+
       <footer className="bg-gray-800 text-center text-gray-400 py-4">
         &copy; 2024 Bookmark Manager. All rights reserved.
       </footer>
